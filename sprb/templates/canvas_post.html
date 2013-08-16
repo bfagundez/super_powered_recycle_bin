@@ -10,7 +10,7 @@
     Sfdc.canvas.oauth.token(sr.oauthToken);
     
     var accounts_resturl = sr.context.links.restUrl+'sobjects/account';
-
+      console.log("calling this"+accounts_resturl);
     // Make an XHR call back to salesforce through the supplied browser proxy. 
     Sfdc.canvas.client.ajax(accounts_resturl, 
       {client : sr.client,
@@ -22,4 +22,5 @@
 
 
     });
+  });
 </script>

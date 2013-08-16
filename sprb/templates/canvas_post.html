@@ -9,8 +9,8 @@
     // Save the token
     Sfdc.canvas.oauth.token(sr.oauthToken);
     
-    var accounts_resturl = sr.context.links.restUrl+'sobjects/account';
-      console.log("calling this"+accounts_resturl);
+    var query_resturl = sr.context.links.restUrl+'query/?q=select id from Account';
+      console.log("calling this"+query_resturl);
     // Make an XHR call back to salesforce through the supplied browser proxy. 
     Sfdc.canvas.client.ajax(accounts_resturl, 
       {client : sr.client,

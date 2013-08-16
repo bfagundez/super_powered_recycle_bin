@@ -8,6 +8,7 @@
     var sr = JSON.parse('{{canvasRequestJSON|safe}}');
     // Save the token
     Sfdc.canvas.oauth.token(sr.oauthToken);
+    console.log(Sfdc, sr);
     // // attach event
     // $('.callSFMethod').click(function(ev){
 

@@ -6,7 +6,7 @@ from classes.signed_request import SignedRequest
 def index():
 	return render_template('index.html')
 
-@sprb.route('/canvas', methods=['POST'])
+@sprb.route('/canvas', methods=['POST',])
 def canvas():
 	sr_param = request.args.get('signed_request')
 	secret = '1576956863759220964'

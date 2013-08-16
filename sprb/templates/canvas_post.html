@@ -1,0 +1,24 @@
+<script type="text/javascript">
+     Sfdc.canvas(function() {
+
+    // Parse the signed request.
+    var sr = JSON.parse('{{canvasRequestJSON}}');
+    // Save the token
+    Sfdc.canvas.oauth.token(sr.oauthToken);
+    // // attach event
+    // $('.callSFMethod').click(function(ev){
+
+    //   // build message data
+    //   var messageData = {}
+    //   messageData['method'] = 'alert'
+    //   messageData['content'] = $(ev.srcElement).data('values')
+
+    //   // post message
+    //   parent.window.postMessage(
+    //     JSON.stringify(messageData),
+    //     sr.client.targetOrigin
+    //   )
+    // });
+
+    });
+</script>

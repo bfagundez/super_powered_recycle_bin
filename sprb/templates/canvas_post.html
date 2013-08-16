@@ -9,6 +9,20 @@
     // Save the token
     Sfdc.canvas.oauth.token(sr.oauthToken);
     console.log(Sfdc, sr);
+    sessionId = sr.oauthToken;
+     $.ajax({
+           url: 'https://na15.salesforce.com/services/data/v27.0/',
+           beforeSend: function (request)
+           {
+           request.setRequestHeader("Authorization", 'Bearer '+sessionId );
+           }, dataType: 'json'
+           }).done(function(res){
+                   console.log(api_contacted);
+                   console.log('success',res);
+            }).fail(function(res){
+             console.log('fail',res);
+             });
+    });
     // // attach event
     // $('.callSFMethod').click(function(ev){
 

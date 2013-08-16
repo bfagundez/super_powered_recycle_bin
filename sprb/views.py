@@ -18,7 +18,7 @@ def canvas():
 	print 'calling helper'
 	srHelper = SignedRequest(secret,sr_param)
 	canvasRequestJSON = srHelper.verifyAndDecode()
-	return render_template('canvas_post.html', canvasRequestJSON = json.dumps(canvasRequestJSON) )
+	return render_template('canvas_post.html', canvasRequestJSON = canvasRequestJSON )
 
 @sprb.route('/hello')
 def hello():

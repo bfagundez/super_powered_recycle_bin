@@ -3,7 +3,7 @@
      Sfdc.canvas(function() {
 
     // Parse the signed request.
-    var sr = JSON.parse('{{canvasRequestJSON}}');
+    var sr = JSON.parse('{{canvasRequestJSON|safe}}');
     // Save the token
     Sfdc.canvas.oauth.token(sr.oauthToken);
     // // attach event

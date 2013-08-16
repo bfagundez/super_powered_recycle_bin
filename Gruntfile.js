@@ -12,7 +12,7 @@ module.exports = function( grunt ) {
 
     // specify an alternate install location for Bower
     bower: {
-      dir: 'sprb/components'
+      dir: 'sprb/static/js'
     },
 
     // Coffee to JS compilation

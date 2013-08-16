@@ -9,7 +9,8 @@ def index():
 @sprb.route('/canvas', methods=['POST',])
 def canvas():
 	print 'received call'
-	sr_param = request.args.get('signed_request')
+
+	sr_param = request.form['signed_request']
 	print 'got param'+sr_param
 
 	secret = '1576956863759220964'

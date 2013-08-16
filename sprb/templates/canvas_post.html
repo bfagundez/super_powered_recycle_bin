@@ -11,7 +11,7 @@
     console.log(Sfdc, sr);
     sessionId = sr.oauthToken;
     $.ajax({
-      url: 'https://na15.salesforce.com/services/data/v27.0/',
+      url: '/services/data/v28.0/sobjects/',
       beforeSend: function (request)
       {
         request.setRequestHeader("Authorization", 'Bearer '+sessionId );

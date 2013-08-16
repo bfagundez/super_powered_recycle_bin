@@ -10,35 +10,20 @@
     Sfdc.canvas.oauth.token(sr.oauthToken);
     console.log(Sfdc, sr);
     sessionId = sr.oauthToken;
-     $.ajax({
-           url: 'https://na15.salesforce.com/services/data/v27.0/',
-           beforeSend: function (request)
-           {
-           request.setRequestHeader("Authorization", 'Bearer '+sessionId );
-           }, dataType: 'json'
-           }).done(function(res){
-                   console.log(api_contacted);
-                   console.log('success',res);
-            }).fail(function(res){
-             console.log('fail',res);
-             });
+    $.ajax({
+      url: 'https://na15.salesforce.com/services/data/v27.0/',
+      beforeSend: function (request)
+      {
+        request.setRequestHeader("Authorization", 'Bearer '+sessionId );
+      }, dataType: 'json'
+     }).done(function(res){
+        console.log(api_contacted);
+        console.log('success',res);
+      }).fail(function(res){
+        console.log('fail',res);
+      });
     });
-    // // attach event
-    // $('.callSFMethod').click(function(ev){
 
-    //   // build message data
-    //   var messageData = {}
-    //   messageData['method'] = 'alert'
-    //   messageData['content'] = $(ev.srcElement).data('values')
-
-    //   // post message
-    //   parent.window.postMessage(
-    //     JSON.stringify(messageData),
-    //     sr.client.targetOrigin
-    //   )
-    // });
 
     });
-  })
-    
 </script>

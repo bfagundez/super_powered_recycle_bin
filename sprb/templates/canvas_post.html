@@ -8,7 +8,7 @@
     var sr = JSON.parse('{{canvasRequestJSON|safe}}');
     // Save the token
     Sfdc.canvas.oauth.token(sr.oauthToken);
-    
+    console.log(Sfdc,sr)
     var query_resturl = sr.context.links.restUrl+'query/?q=select id from Account';
       console.log("calling this"+query_resturl);
     // Make an XHR call back to salesforce through the supplied browser proxy. 

@@ -1,6 +1,7 @@
 from flask import render_template, request
 from sprb import sprb
 from classes.signed_request import SignedRequest
+import json
 
 @sprb.route('/')
 def index():
@@ -17,7 +18,7 @@ def canvas():
 	print 'calling helper'
 	srHelper = SignedRequest(secret,sr_param)
 	canvasRequestJSON = srHelper.verifyAndDecode()
-	return render_template('canvas_post.html', canvasRequestJSON = canvasRequestJSON )
+	return render_template('canvas_post.html', canvasRequestJSON = json.dumps(canvasRequestJSON) )
 
 @sprb.route('/hello')
 def hello():

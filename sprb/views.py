@@ -2,6 +2,7 @@ from flask import render_template, request
 from sprb import sprb
 from classes.signed_request import SignedRequest
 import json
+import os
 from sforce_custom.partner import SforcePartnerClient
 
 # load WSDL declaration file
@@ -23,7 +24,7 @@ def get_bin_records(object_name):
 @sprb.route('/canvas', methods=['POST',])
 def canvas():
 	sr_param = request.form['signed_request']
-	secret =  os.environ.get('CANVAS_SECRET')
+	secret = os.environ.get('CANVAS_SECRET')
 	srHelper = SignedRequest(secret,sr_param)
 	canvasRequestJSON = srHelper.verifyAndDecode()
 	

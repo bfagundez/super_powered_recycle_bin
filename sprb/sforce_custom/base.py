@@ -17,7 +17,6 @@
 import string
 import sys
 import os.path
-import ipdb
 
 import logging
 

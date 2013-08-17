@@ -16,7 +16,6 @@
 
 
 from base import SforceBaseClient
-import ipdb
 import string
 import cProfile
 import suds.sudsobject

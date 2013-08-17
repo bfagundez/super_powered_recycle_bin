@@ -4,41 +4,42 @@ from classes.signed_request import SignedRequest
 import json
 from sforce_custom.partner import SforcePartnerClient
 
-print "loading wsdl declaration"
+# load WSDL declaration file
 sf = SforcePartnerClient('sprb/partner.wsdl')
-print "loaded wsdl"
 
 @sprb.route('/')
 def index():
 	return render_template('index.html')
 
+@sprb.route('/get_bin_records/<object_name>')
+def get_bin_records(object_name):
+	q = sf.queryAll("select id,Name from Account where isDeleted = true")
+	recs = []
+	for r in q.records:
+		recs.append(str(r))
+
+	return str(recs)
+
 @sprb.route('/canvas', methods=['POST',])
 def canvas():
-	print 'received call'
-
 	sr_param = request.form['signed_request']
-	print 'got param'+sr_param
-
-	secret = '1576956863759220964'
-	print 'calling helper'
+	secret =  os.environ.get('CANVAS_SECRET')
 	srHelper = SignedRequest(secret,sr_param)
 	canvasRequestJSON = srHelper.verifyAndDecode()
 	
+	#load request data json to extract parameters
 	request_data = json.loads(canvasRequestJSON)
 	header = sf.generateHeader('SessionHeader')
-	print "generated header"+str(header)
+	
+	# oauth token (that will work as session id)
 	token = request_data['client']['oauthToken']
-	print "token"+token
 	endpoint = request_data['client']['instanceUrl']+request_data['context']['links']['partnerUrl']
-	print "endpoint "+endpoint
+	
+	# set sf soap toolkit headers
 	header.sessionId = token
 	sf.setSessionHeader(header)
 	sf._sessionId = token
 	sf._setEndpoint(endpoint)
-
-	q = sf.queryAll("select id from Account")
-
-	print "and the query size is: "+str(q.size)
 
 	return render_template('canvas_post.html', canvasRequestJSON = canvasRequestJSON )
 

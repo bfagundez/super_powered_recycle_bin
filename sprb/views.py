@@ -26,7 +26,7 @@ def canvas():
 	#
 	#print str(request_data)
 	print "starting the sf login"
-	sf = SforcePartnerClient('sforce_custom/partner.wsdl')
+	sf = SforcePartnerClient('https://super-powered-recycle-bin.herokuapp.com/static/partner.wsdl')
 
 	header = sf.generateHeader('SessionHeader')
 	print "generated header"+str(header)

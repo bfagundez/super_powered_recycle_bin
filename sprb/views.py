@@ -4,6 +4,9 @@ from classes.signed_request import SignedRequest
 import json
 from sforce_custom.partner import SforcePartnerClient
 
+print "loading wsdl declaration"
+sf = SforcePartnerClient('https://super-powered-recycle-bin.herokuapp.com/static/partner.wsdl')
+print "loaded wsdl"
 
 @sprb.route('/')
 def index():
@@ -22,12 +25,6 @@ def canvas():
 	canvasRequestJSON = srHelper.verifyAndDecode()
 	
 	request_data = json.loads(canvasRequestJSON)
-
-	#
-	#print str(request_data)
-	print "starting the sf login"
-	sf = SforcePartnerClient('/static/partner.wsdl')
-	print "loaded wsdl"
 	header = sf.generateHeader('SessionHeader')
 	print "generated header"+str(header)
 	token = request_data['client']['oauthToken']

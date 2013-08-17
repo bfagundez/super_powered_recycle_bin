@@ -24,14 +24,20 @@ def canvas():
 	request_data = json.loads(canvasRequestJSON)
 
 	#
-	print str(request_data)
-
+	#print str(request_data)
+	print "starting the sf login"
 	sf = SforcePartnerClient('sforce_custom/partner.wsdl')
+
 	header = sf.generateHeader('SessionHeader')
-	header.sessionId = request_data['client']['oauthToken']
+	print "generated header"+str(header)
+	token = request_data['client']['oauthToken']
+	print "token"+token
+	endpoint = request_data['client']['instanceUrl']+request_data['context']['links']['partnerUrl']
+	print "endpoint "+endpoint
+	header.sessionId = token
 	sf.setSessionHeader(header)
-	sf._sessionId = request_data['client']['oauthToken']
-	sf._setEndpoint(request_data['client']['instanceUrl']+request_data['context']['links']['partnerUrl'])
+	sf._sessionId = token
+	sf._setEndpoint(endpoint)
 
 	q = sf.queryAll("select id from Account")
 

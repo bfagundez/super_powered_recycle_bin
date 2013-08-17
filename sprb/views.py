@@ -5,7 +5,7 @@ import json
 from sforce_custom.partner import SforcePartnerClient
 
 print "loading wsdl declaration"
-sf = SforcePartnerClient('https://super-powered-recycle-bin.herokuapp.com/static/partner.wsdl')
+sf = SforcePartnerClient('sprb/partner.wsdl')
 print "loaded wsdl"
 
 @sprb.route('/')

@@ -4,6 +4,9 @@ MarkupSafe==0.18
 Werkzeug==0.9.3
 distribute==0.6.34
 gunicorn==17.5
+ipdb==0.7
+ipython==1.0.0
 itsdangerous==0.23
+redis==2.8.0
 suds==0.4
 wsgiref==0.1.2

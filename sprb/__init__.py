@@ -12,4 +12,4 @@ sprb.jinja_env.globals['static'] = (
 	lambda filename: url_for('static', filename = filename)
 )
 
-from sprb import views
+from sprb import views, api_routes

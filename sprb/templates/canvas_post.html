@@ -3,6 +3,7 @@
   <head>
     <script src="{{ static('js/vendors/jquery/jquery.min.js') }}"></script>
     <script src="{{ static('js/vendors/bootstrap/js/tab.js') }}"></script>
+    <script src="{{ static('js/vendors/bootstrap/js/modal.js') }}"></script>
     <script src="{{ static('js/vendors/angular/angular.min.js') }}"></script>
     <link rel="stylesheet" href="{{ static('css/bootstrap.css') }}" >
     <script type="text/javascript">
@@ -29,7 +30,7 @@
       });
     </script>
   </head>
-  <body ng-controller="RecycleBinCtrl">
+     <body ng-controller="RecycleBinCtrl">
         <div class="container">
             <br/><br/>
             <p><img src="{{ static('img/logo.png') }}" alt="Super powered recycle bin" /></p>
@@ -71,9 +72,8 @@
                             <tr ng-repeat="rec in obj.records | orderBy:predicate:reverse | filter:searchText">
                                 <td class="text-center">
                                     <div class="btn-group">
-                                        <a href="#" class="btn btn-xs btn-primary">Archive</a>
-                                        <a href="#" class="btn btn-xs btn-danger">Discard</a>
-                                        <a href="#" class="btn btn-xs btn-success">Restore</a>
+                                       <button class="btn btn-xs btn-primary" ng-click="archive_item(this)" data-rec="[{rec}]" >Archive</button>
+                                        <button class="btn btn-xs btn-success" ng-click="restore_item(this)" data-rec="[{rec}]">Restore</button>
                                     </div>
                                 </td>
                                 <td>[{rec.Id}]</td>
@@ -83,7 +83,6 @@
                         </tbody>
                     </table>
                     <br/>
-                    <button class="btn btn-primary">Archive all</button>
 
                 </div>
 
@@ -115,9 +114,8 @@
                             <tr ng-repeat="rec in allrecords | orderBy:predicate:reverse | filter:searchText">
                                 <td class="text-center">
                                     <div class="btn-group">
-                                        <a href="#" class="btn btn-xs btn-primary">Archive</a>
-                                        <a href="#" class="btn btn-xs btn-danger">Discard</a>
-                                        <a href="#" class="btn btn-xs btn-success">Restore</a>
+                                        <button class="btn btn-xs btn-primary" ng-click="archive_item(this)" data-rec="[{rec}]">Archive</button>
+                                        <button class="btn btn-xs btn-success" ng-click="restore_item(this)" data-rec="[{rec}]">Restore</button>
                                     </div>
                                 </td>
                                 <td>[{rec.Id}]</td>
@@ -127,11 +125,23 @@
                         </tbody>
                     </table>
                     <br/>
-                    <button class="btn btn-primary">Archive all</button>
+
                 </div>
             </div>
+        <!-- Modal -->
+          <div class="modal fade" id="loading" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-body">
+                    <p class="text-center">Loading...</p>
+                </div>
+              </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+          </div><!-- /.modal -->
 
         </div>
+
+
 
       <script type="text/javascript">
 
@@ -145,47 +155,87 @@
 
             function RecycleBinCtrl($scope) {
 
+                $('#loading').modal('show');
+
                 $scope.objects = [];
                 $scope.allrecords = [];
 
                 $scope.loaded_accounts = $.Deferred();
                 $scope.loaded_contacts = $.Deferred();
-                $scope.loaded_leads = $.Deferred();
 
-                $.ajax("/get_bin_records/account").done(function(res){
-                    var account_obj = {};
-                    account_obj.Name = 'Account';
-                    account_obj.records = JSON.parse(res);
-                    $scope.objects.push(account_obj);
-                    $scope.allrecords.push.apply($scope.allrecords,account_obj.records);
-                    $scope.$apply();
-                    $scope.loaded_accounts.resolve();
-                 })
+                $scope.archive_item = function(a){
+                    $('#loading').modal('show');
 
-                 $.ajax("/get_bin_records/contact").done(function(res){
-                    var contact_obj = {};
-                    contact_obj.Name = 'Contact';
-                    contact_obj.records = JSON.parse(res);
-                    $scope.objects.push(contact_obj);
-                    $scope.allrecords.push.apply($scope.allrecords,contact_obj.records);
-                    $scope.$apply();
-                    $scope.loaded_contacts.resolve();
-                 })
+                    // rec data
+                    var rec_data = a.this.rec;
+                    console.log('archive item',rec_data);
+                    $.post('/api/archive',rec_data).done(function(res){
+                        if(res.success){
+                            $scope.refreshCollections();
+                        } else {
+                            alert('Error found!');
+                            $('#loading').modal('hide');
+                        }
+                    })
 
-                 $.ajax("/get_bin_records/lead").done(function(res){
-                    var lead_obj = {};
-                    lead_obj.Name = 'Lead';
-                    lead_obj.records = JSON.parse(res);
-                    $scope.objects.push(lead_obj);
-                    $scope.allrecords.push.apply($scope.allrecords,lead_obj.records);
-                    $scope.$apply();
-                    $scope.loaded_leads.resolve();
-                 })
+                }
 
-                 // when all collections are ready, hide loader, show tabs
-                 $.when($scope.loaded_accounts,$scope.loaded_contacts,$scope.loaded_leads).done(function(){
-                    $("#objTabs a:first").tab('show');
-                 });
+                $scope.restore_item = function(a){
+                    $('#loading').modal('show');
+
+                    // rec data
+                    var rec_data = a.this.rec;
+
+                    console.log('restore item',rec_data);
+                    $.post('/api/restore',rec_data).done(function(res){
+                        console.log(res,'restored?')
+                        if(res.success){
+                            $scope.refreshCollections();
+                        } else {
+                             alert('Error found!');
+                            $('#loading').modal('hide');
+                        }
+                    })
+                }
+
+                $scope.refreshCollections = function(){
+
+
+                    $scope.objects = []
+                    $scope.allrecords = []
+
+                    $.ajax("/get_bin_records/account").done(function(res){
+                        var account_obj = {};
+                        account_obj.Name = 'Account';
+                        account_obj.records = JSON.parse(res);
+                        $scope.objects.push(account_obj);
+                        $scope.allrecords.push.apply($scope.allrecords,account_obj.records);
+                        $scope.$apply();
+                        $scope.loaded_accounts.resolve();
+                     })
+
+                     $.ajax("/get_bin_records/contact").done(function(res){
+                        var contact_obj = {};
+                        contact_obj.Name = 'Contact';
+                        contact_obj.records = JSON.parse(res);
+                        $scope.objects.push(contact_obj);
+                        $scope.allrecords.push.apply($scope.allrecords,contact_obj.records);
+                        $scope.$apply();
+                        $scope.loaded_contacts.resolve();
+                     })
+
+
+                     // when all collections are ready, hide loader, show tabs
+                     $.when($scope.loaded_accounts,$scope.loaded_contacts).done(function(){
+                        $("#objTabs a:first").tab('show');
+                        $('#loading').modal('hide');
+                     });
+
+                }
+
+                $scope.refreshCollections();
+
+
 
             }
         </script>

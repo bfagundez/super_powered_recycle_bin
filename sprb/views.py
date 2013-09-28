@@ -6,24 +6,9 @@ import json
 import os
 from sforce_custom.partner import SforcePartnerClient
 
+
 # load WSDL declaration file
 sf = SforcePartnerClient('sprb/partner.wsdl')
-
-@sprb.route('/')
-def index():
-	return render_template('index.html')
-
-@sprb.route('/get_bin_records/<object_name>')
-def get_bin_records(object_name):
-	sfq = sf.queryAll("select id, Name from "+object_name+" where isDeleted = true")
-	recs = []
-	if sfq.size > 0:
-		for rec in sfq.records:
-			rec_serialized = { x : rec.__getitem__(x) for x in rec.__keylist__ }
-			rec_serialized['obj_type'] = object_name
-			recs.append(rec_serialized)
-
-	return json.dumps(recs)
 
 @sprb.route('/canvas_testing')
 def canvas_testing():

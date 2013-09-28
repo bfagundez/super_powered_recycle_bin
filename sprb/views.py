@@ -1,7 +1,8 @@
 from flask import render_template, request
 from sprb import sprb
 from classes.signed_request import SignedRequest
-import json, ipdb
+import json
+#import ipdb
 import os
 from sforce_custom.partner import SforcePartnerClient
 
@@ -17,7 +18,7 @@ def get_bin_records(object_name):
 	q = sf.queryAll("select id,Name from Account where isDeleted = true")
 	recs = []
 	for r in q.records:
-		ipdb.set_trace()
+		#ipdb.set_trace()
 		recs.append(json.dumps(r))
 
 	return json.dumps(recs)

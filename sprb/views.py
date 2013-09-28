@@ -15,11 +15,12 @@ def index():
 
 @sprb.route('/get_bin_records/<object_name>')
 def get_bin_records(object_name):
-	q = sf.queryAll("select id,Name from Account where isDeleted = true")
+	sfq = sf.queryAll("select id, Name from "+object_name+" where isDeleted = true")
 	recs = []
-	for r in q.records:
-		#ipdb.set_trace()
-		recs.append(json.dumps(r))
+	if sfq.size > 0:
+		for rec in sfq.records:
+			rec_serialized = { x : rec.__getitem__(x) for x in rec.__keylist__ }
+			recs.append(rec_serialized)
 
 	return json.dumps(recs)
 

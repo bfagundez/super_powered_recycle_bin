@@ -2,7 +2,23 @@
 <script type="text/javascript">
 	$(function(){
 		 $.ajax("/get_bin_records/account").done(function(res){
-	     	console.log(res)
+	     	console.log('accounts')
+            console.log(res)
 	     })
+
+         $.ajax("/get_bin_records/contact").done(function(res){
+            console.log('contacts')
+            console.log(res)
+         })
+
+         $.ajax("/get_bin_records/lead").done(function(res){
+            console.log('leads')
+            console.log(res)
+         })
+
+         $.ajax("/get_bin_records/opportunity").done(function(res){
+            console.log('oppty')
+            console.log(res)
+         })
 	})
 </script>

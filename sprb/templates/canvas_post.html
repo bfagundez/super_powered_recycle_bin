@@ -1,8 +1,10 @@
+<!DOCTYPE html>
 <html ng-app="sprb">
   <head>
-    <script src="{{ static('js/jquery/jquery.min.js') }}"></script>
-    <script src="{{ static('js/vendors/sfdc/canvas-all.js') }}"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+    <script src="{{ static('js/vendors/jquery/jquery.min.js') }}"></script>
+    <script src="{{ static('js/vendors/bootstrap/js/tab.js') }}"></script>
+    <script src="{{ static('js/vendors/angular/angular.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ static('css/bootstrap.css') }}" >
     <script type="text/javascript">
       $(function(){
          Sfdc.canvas(function() {
@@ -12,8 +14,8 @@
           // Save the token
           Sfdc.canvas.oauth.token(sr.oauthToken);
           console.log(Sfdc,sr)
-          var query_resturl = sr.context.links.restUrl+'query/?q=select id from Account where isDeleted=true';
-            console.log("calling this"+query_resturl);
+          //var query_resturl = sr.context.links.restUrl+'query/?q=select id from Account where isDeleted=true';
+          //console.log("calling this"+query_resturl);
           // Make an XHR call back to salesforce through the supplied browser proxy.
           Sfdc.canvas.client.ajax(query_resturl,
             {client : sr.client,
@@ -24,38 +26,112 @@
           });
           });
 
-           // $.ajax("/get_bin_records/account").done(function(res){
-           //  console.log('accounts')
-           //      console.log(res)
-           // })
-
-           // $.ajax("/get_bin_records/contact").done(function(res){
-           //    console.log('contacts')
-           //    console.log(res)
-           // })
-
-           // $.ajax("/get_bin_records/lead").done(function(res){
-           //    console.log('leads')
-           //    console.log(res)
-           // })
-
-           // $.ajax("/get_bin_records/opportunity").done(function(res){
-           //    console.log('oppty')
-           //    console.log(res)
-           // })
       });
     </script>
   </head>
- <body ng-controller="RecycleBinCtrl">
+  <body ng-controller="RecycleBinCtrl">
+        <div class="container">
+            <br/><br/>
+            <p><img src="{{ static('img/logo.png') }}" alt="Super powered recycle bin" /></p>
 
-        <ul>
-            <li ng-repeat="obj in objects">
-                [{obj.Name}]
-                <p ng-repeat="rec in obj.records">
-                    [{rec.Id}] - [{rec.Name}]
-                </p>
-            </li>
-        </ul>
+            <!-- Tabs -->
+            <ul class="nav nav-tabs" id="objTabs">
+                 <li>
+                    <a href="#all" data-toggle="tab">All</a>
+                </li>
+                <li ng-repeat="obj in objects">
+                    <a href="#[{obj.Name}]" data-toggle="tab">[{obj.Name}]s</a>
+                </li>
+            </ul>
+
+            <!-- Tabs Content -->
+            <div class="tab-content">
+
+                <!-- Per object tabs -->
+                <div class="tab-pane" ng-repeat="obj in objects" id="[{obj.Name}]" >
+                    <br/><br/>
+                    <label>Filter:</label><input ng-model="searchText">
+                    <br/><br/>
+                    <table class="table table-bordered table-striped ">
+                        <thead>
+                            <tr>
+                                <th class="col-md-2"></th>
+                                <th class="col-md-2">
+                                    <a href="" ng-click="predicate = 'Id'; reverse=false">Id</a>
+                                    (<a href="" ng-click="predicate = '-Id'; reverse=false">^</a>)
+                                </th>
+                                <th>
+                                    <a href="" ng-click="predicate = 'Name'; reverse=false">Name</a>
+                                    (<a href="" ng-click="predicate = '-Name'; reverse=false">^</a>)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="rec in obj.records | orderBy:predicate:reverse | filter:searchText">
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        <a href="#" class="btn btn-xs btn-primary">Archive</a>
+                                        <a href="#" class="btn btn-xs btn-danger">Discard</a>
+                                        <a href="#" class="btn btn-xs btn-success">Restore</a>
+                                    </div>
+                                </td>
+                                <td>[{rec.Id}]</td>
+                                <td>[{rec.Name}]</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br/>
+                    <button class="btn btn-primary">Archive all</button>
+
+                </div>
+
+                <!-- All records together -->
+                <div class="tab-pane" id="all" >
+                    <br/><br/>
+                    <label>Filter:</label><input ng-model="searchText">
+                    <br/><br/>
+
+                    <table class="table table-bordered table-striped ">
+                        <thead>
+                            <tr>
+                                <th class="col-md-2"></th>
+                                <th class="col-md-2">
+                                    <a href="" ng-click="predicate = 'Id'; reverse=false">Id</a>
+                                    (<a href="" ng-click="predicate = '-Id'; reverse=false">^</a>)
+                                </th>
+                                <th>
+                                    <a href="" ng-click="predicate = 'Name'; reverse=false">Name</a>
+                                    (<a href="" ng-click="predicate = '-Name'; reverse=false">^</a>)
+                                </th>
+                                <th>
+                                    <a href="" ng-click="predicate = 'obj_type'; reverse=false">Type</a>
+                                    (<a href="" ng-click="predicate = '-obj_type'; reverse=false">^</a>)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="rec in allrecords | orderBy:predicate:reverse | filter:searchText">
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        <a href="#" class="btn btn-xs btn-primary">Archive</a>
+                                        <a href="#" class="btn btn-xs btn-danger">Discard</a>
+                                        <a href="#" class="btn btn-xs btn-success">Restore</a>
+                                    </div>
+                                </td>
+                                <td>[{rec.Id}]</td>
+                                <td>[{rec.Name}]</td>
+                                <td>[{rec.obj_type}]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br/>
+                    <button class="btn btn-primary">Archive all</button>
+                </div>
+            </div>
+
+        </div>
 
       <script type="text/javascript">
 
@@ -65,16 +141,25 @@
                   $interpolateProvider.endSymbol('}]');
             });
 
+            $(function(){});
 
             function RecycleBinCtrl($scope) {
+
                 $scope.objects = [];
+                $scope.allrecords = [];
+
+                $scope.loaded_accounts = $.Deferred();
+                $scope.loaded_contacts = $.Deferred();
+                $scope.loaded_leads = $.Deferred();
 
                 $.ajax("/get_bin_records/account").done(function(res){
                     var account_obj = {};
                     account_obj.Name = 'Account';
                     account_obj.records = JSON.parse(res);
                     $scope.objects.push(account_obj);
+                    $scope.allrecords.push.apply($scope.allrecords,account_obj.records);
                     $scope.$apply();
+                    $scope.loaded_accounts.resolve();
                  })
 
                  $.ajax("/get_bin_records/contact").done(function(res){
@@ -82,7 +167,9 @@
                     contact_obj.Name = 'Contact';
                     contact_obj.records = JSON.parse(res);
                     $scope.objects.push(contact_obj);
+                    $scope.allrecords.push.apply($scope.allrecords,contact_obj.records);
                     $scope.$apply();
+                    $scope.loaded_contacts.resolve();
                  })
 
                  $.ajax("/get_bin_records/lead").done(function(res){
@@ -90,11 +177,17 @@
                     lead_obj.Name = 'Lead';
                     lead_obj.records = JSON.parse(res);
                     $scope.objects.push(lead_obj);
+                    $scope.allrecords.push.apply($scope.allrecords,lead_obj.records);
                     $scope.$apply();
+                    $scope.loaded_leads.resolve();
                  })
+
+                 // when all collections are ready, hide loader, show tabs
+                 $.when($scope.loaded_accounts,$scope.loaded_contacts,$scope.loaded_leads).done(function(){
+                    $("#objTabs a:first").tab('show');
+                 });
 
             }
         </script>
     </body>
-
 </html>

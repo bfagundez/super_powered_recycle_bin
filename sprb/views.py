@@ -20,6 +20,7 @@ def get_bin_records(object_name):
 	if sfq.size > 0:
 		for rec in sfq.records:
 			rec_serialized = { x : rec.__getitem__(x) for x in rec.__keylist__ }
+			rec_serialized['obj_type'] = object_name
 			recs.append(rec_serialized)
 
 	return json.dumps(recs)

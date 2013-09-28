@@ -1,44 +1,100 @@
-<script src="{{ static('js/jquery/jquery.min.js') }}"></script>
-<script src="{{ static('js/vendors/sfdc/canvas-all.js') }}"></script>
-<script type="text/javascript">
-  $(function(){
-     Sfdc.canvas(function() {
+<html ng-app="sprb">
+  <head>
+    <script src="{{ static('js/jquery/jquery.min.js') }}"></script>
+    <script src="{{ static('js/vendors/sfdc/canvas-all.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+    <script type="text/javascript">
+      $(function(){
+         Sfdc.canvas(function() {
 
-    // Parse the signed request.
-    var sr = JSON.parse('{{canvasRequestJSON|safe}}');
-    // Save the token
-    Sfdc.canvas.oauth.token(sr.oauthToken);
-    console.log(Sfdc,sr)
-    var query_resturl = sr.context.links.restUrl+'query/?q=select id from Account where isDeleted=true';
-      console.log("calling this"+query_resturl);
-    // Make an XHR call back to salesforce through the supplied browser proxy.
-    Sfdc.canvas.client.ajax(query_resturl,
-      {client : sr.client,
-        success : function(data){
-        // Make sure the status code is OK.
-        console.log(data);
-      }
-    });
-    });
+          // Parse the signed request.
+          var sr = JSON.parse('{{canvasRequestJSON|safe}}');
+          // Save the token
+          Sfdc.canvas.oauth.token(sr.oauthToken);
+          console.log(Sfdc,sr)
+          var query_resturl = sr.context.links.restUrl+'query/?q=select id from Account where isDeleted=true';
+            console.log("calling this"+query_resturl);
+          // Make an XHR call back to salesforce through the supplied browser proxy.
+          Sfdc.canvas.client.ajax(query_resturl,
+            {client : sr.client,
+              success : function(data){
+              // Make sure the status code is OK.
+              console.log(data);
+            }
+          });
+          });
 
-       $.ajax("/get_bin_records/account").done(function(res){
-        console.log('accounts')
-            console.log(res)
-       })
+           // $.ajax("/get_bin_records/account").done(function(res){
+           //  console.log('accounts')
+           //      console.log(res)
+           // })
 
-       $.ajax("/get_bin_records/contact").done(function(res){
-          console.log('contacts')
-          console.log(res)
-       })
+           // $.ajax("/get_bin_records/contact").done(function(res){
+           //    console.log('contacts')
+           //    console.log(res)
+           // })
 
-       $.ajax("/get_bin_records/lead").done(function(res){
-          console.log('leads')
-          console.log(res)
-       })
+           // $.ajax("/get_bin_records/lead").done(function(res){
+           //    console.log('leads')
+           //    console.log(res)
+           // })
 
-       $.ajax("/get_bin_records/opportunity").done(function(res){
-          console.log('oppty')
-          console.log(res)
-       })
-  });
-</script>
+           // $.ajax("/get_bin_records/opportunity").done(function(res){
+           //    console.log('oppty')
+           //    console.log(res)
+           // })
+      });
+    </script>
+  </head>
+ <body ng-controller="RecycleBinCtrl">
+
+        <ul>
+            <li ng-repeat="obj in objects">
+                [{obj.Name}]
+                <p ng-repeat="rec in obj.records">
+                    [{rec.Id}] - [{rec.Name}]
+                </p>
+            </li>
+        </ul>
+
+      <script type="text/javascript">
+
+            var app = angular.module('sprb', []);
+                app.config(function($interpolateProvider) {
+                  $interpolateProvider.startSymbol('[{');
+                  $interpolateProvider.endSymbol('}]');
+            });
+
+
+            function RecycleBinCtrl($scope) {
+                $scope.objects = [];
+
+                $.ajax("/get_bin_records/account").done(function(res){
+                    var account_obj = {};
+                    account_obj.Name = 'Account';
+                    account_obj.records = JSON.parse(res);
+                    $scope.objects.push(account_obj);
+                    $scope.$apply();
+                 })
+
+                 $.ajax("/get_bin_records/contact").done(function(res){
+                    var contact_obj = {};
+                    contact_obj.Name = 'Contact';
+                    contact_obj.records = JSON.parse(res);
+                    $scope.objects.push(contact_obj);
+                    $scope.$apply();
+                 })
+
+                 $.ajax("/get_bin_records/lead").done(function(res){
+                    var lead_obj = {};
+                    lead_obj.Name = 'Lead';
+                    lead_obj.records = JSON.parse(res);
+                    $scope.objects.push(lead_obj);
+                    $scope.$apply();
+                 })
+
+            }
+        </script>
+    </body>
+
+</html>

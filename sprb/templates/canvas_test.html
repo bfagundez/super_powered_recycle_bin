@@ -1,24 +1,59 @@
-<script src="{{ static('js/jquery/jquery.min.js') }}"></script>
-<script type="text/javascript">
-	$(function(){
-		 $.ajax("/get_bin_records/account").done(function(res){
-	     	console.log('accounts')
-            console.log(res)
-	     })
+<html ng-app="sprb">
+    <head>
+        <script src="{{ static('js/jquery/jquery.min.js') }}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+        <script src="{{ static('js/custom/angular_boot.js') }}"></script>
 
-         $.ajax("/get_bin_records/contact").done(function(res){
-            console.log('contacts')
-            console.log(res)
-         })
+    </head>
+    <body ng-controller="RecycleBinCtrl">
 
-         $.ajax("/get_bin_records/lead").done(function(res){
-            console.log('leads')
-            console.log(res)
-         })
+        <ul>
+            <li ng-repeat="obj in objects">
+                [{obj.Name}]
+                <p ng-repeat="rec in obj.records">
+                    [{rec.Id}] - [{rec.Name}]
+                </p>
+            </li>
+        </ul>
 
-         $.ajax("/get_bin_records/opportunity").done(function(res){
-            console.log('oppty')
-            console.log(res)
-         })
-	})
-</script>
+      <script type="text/javascript">
+
+            var app = angular.module('sprb', []);
+                app.config(function($interpolateProvider) {
+                  $interpolateProvider.startSymbol('[{');
+                  $interpolateProvider.endSymbol('}]');
+            });
+
+            $(function(){});
+
+            function RecycleBinCtrl($scope) {
+                $scope.objects = [];
+
+                $.ajax("/get_bin_records/account").done(function(res){
+                    var account_obj = {};
+                    account_obj.Name = 'Account';
+                    account_obj.records = JSON.parse(res);
+                    $scope.objects.push(account_obj);
+                    $scope.$apply();
+                 })
+
+                 $.ajax("/get_bin_records/contact").done(function(res){
+                    var contact_obj = {};
+                    contact_obj.Name = 'Contact';
+                    contact_obj.records = JSON.parse(res);
+                    $scope.objects.push(contact_obj);
+                    $scope.$apply();
+                 })
+
+                 $.ajax("/get_bin_records/lead").done(function(res){
+                    var lead_obj = {};
+                    lead_obj.Name = 'Lead';
+                    lead_obj.records = JSON.parse(res);
+                    $scope.objects.push(lead_obj);
+                    $scope.$apply();
+                 })
+
+            }
+        </script>
+    </body>
+</html>

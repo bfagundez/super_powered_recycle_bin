@@ -11,8 +11,8 @@
     console.log(Sfdc,sr)
     var query_resturl = sr.context.links.restUrl+'query/?q=select id from Account where isDeleted=true';
       console.log("calling this"+query_resturl);
-    // Make an XHR call back to salesforce through the supplied browser proxy. 
-    Sfdc.canvas.client.ajax(query_resturl, 
+    // Make an XHR call back to salesforce through the supplied browser proxy.
+    Sfdc.canvas.client.ajax(query_resturl,
       {client : sr.client,
         success : function(data){
         // Make sure the status code is OK.
@@ -21,7 +21,7 @@
     });
     });
 
-     $.ajax(url:"/get_bin_records/account").done(function(res){
+     $.ajax("/get_bin_records/account").done(function(res){
       console.log(res)
      })
   });

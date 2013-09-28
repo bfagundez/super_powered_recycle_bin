@@ -1,0 +1,8 @@
+<script src="{{ static('js/jquery/jquery.min.js') }}"></script>
+<script type="text/javascript">
+	$(function(){
+		 $.ajax("/get_bin_records/account").done(function(res){
+	     	console.log(res)
+	     })
+	})
+</script>

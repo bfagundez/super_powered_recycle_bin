@@ -7,29 +7,7 @@
     <script src="{{ static('js/vendors/angular/angular.min.js') }}"></script>
     <script src="{{ static('js/vendors/sfdc/canvas-all.js') }}"></script>
     <link rel="stylesheet" href="{{ static('css/bootstrap.css') }}" >
-    <script type="text/javascript">
-      $(function(){
-         Sfdc.canvas(function() {
 
-          // Parse the signed request.
-          var sr = JSON.parse('{{canvasRequestJSON|safe}}');
-          // Save the token
-          Sfdc.canvas.oauth.token(sr.oauthToken);
-          console.log(Sfdc,sr)
-          //var query_resturl = sr.context.links.restUrl+'query/?q=select id from Account where isDeleted=true';
-          //console.log("calling this"+query_resturl);
-          // Make an XHR call back to salesforce through the supplied browser proxy.
-          Sfdc.canvas.client.ajax(query_resturl,
-            {client : sr.client,
-              success : function(data){
-              // Make sure the status code is OK.
-              console.log(data);
-            }
-          });
-          });
-
-      });
-    </script>
   </head>
      <body ng-controller="RecycleBinCtrl">
         <div class="container">

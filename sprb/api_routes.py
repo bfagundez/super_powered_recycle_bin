@@ -36,7 +36,6 @@ def archiveItem():
     if redis_conn.get(request.form['Id']):
         payload["success"] = True
     #redis_conn.persist(request.form['Id'])
-
     return jsonify(payload)
 
 

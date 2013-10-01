@@ -1,6 +1,7 @@
 from sprb import sprb
 from flask import request, jsonify
 from redis import Redis
+import json
 from sprb.views import sf
 
 @sprb.route('/get_bin_records/<object_name>')

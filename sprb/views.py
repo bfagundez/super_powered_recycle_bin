@@ -10,13 +10,6 @@ from sforce_custom.partner import SforcePartnerClient
 # load WSDL declaration file
 sf = SforcePartnerClient('sprb/partner.wsdl') 
 
-@sprb.route('/canvas_testing')
-def canvas_testing():
-	# perform a login with credentials.
-	# be able to test in a dev env.
-	sf.login('force_presentation@brxprojects.com','Dumbl3d0r3!bHpxqOi7Di5i6cR0z45h8rECF','')
-	return render_template('canvas_test.html')
-
 @sprb.route('/canvas', methods=['POST',])
 def canvas():
 	sr_param = request.form['signed_request']

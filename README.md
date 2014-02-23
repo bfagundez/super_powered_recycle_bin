@@ -1,4 +1,14 @@
-super_powered_recycle_bin
+Super Powered Recycle Bin 
 =========================
 
-Sample canvas application in Python 
+This is a sample Force.com Canvas implementation in Python.
+
+Was written as a proof of concept for my Dreamforce 2013 presentation.
+
+Is fully functional and extensible, feel free to fork and modify.
+
+Components
+- Twitter Bootstrap framework
+- AngularJS
+- Flask
+

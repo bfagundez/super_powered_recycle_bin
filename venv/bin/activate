@@ -39,7 +39,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Volumes/D/heroku_apps/super-powered-recycle-bin/venv"
+VIRTUAL_ENV="/Users/geekymartian/heroku_apps/super-powered-recycle-bin/venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

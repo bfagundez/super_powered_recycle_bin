@@ -8,7 +8,7 @@ from sforce_custom.partner import SforcePartnerClient
 
 
 # load WSDL declaration file
-sf = SforcePartnerClient('sprb/partner.wsdl')
+sf = SforcePartnerClient('sprb/partner.wsdl') 
 
 @sprb.route('/canvas_testing')
 def canvas_testing():

@@ -7,6 +7,7 @@ Was written as a proof of concept for my Dreamforce 2013 presentation.
 
 Slides:
 - https://speakerdeck.com/bfagundez/using-python-on-heroku-and-force-dot-com-canvas-to-enhance-salesforce-dot-com
+
 Presentation:
 - http://www.youtube.com/watch?v=1xj5P2cNEvM
 
